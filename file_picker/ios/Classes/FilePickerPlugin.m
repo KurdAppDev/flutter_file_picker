@@ -97,6 +97,13 @@
     
 }
 
+- (UIViewController *)getTopViewController {
+    UIViewController *topViewController = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    while (topViewController.presentedViewController) topViewController = topViewController.presentedViewController;
+    
+    return topViewController;
+}
+
 #pragma mark - Resolvers
 - (void)resolvePickDocumentWithMultiPick:(BOOL)allowsMultipleSelection pickDirectory:(BOOL)isDirectory {
     
@@ -120,7 +127,7 @@
     self.documentPickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
     self.galleryPickerController.allowsEditing = NO;
     
-    [_viewController presentViewController:self.documentPickerController animated:YES completion:nil];
+    [self.getTopViewController presentViewController:self.documentPickerController animated:YES completion:nil];
 }
 
 - (void) resolvePickMedia:(MediaType)type withMultiPick:(BOOL)multiPick withCompressionAllowed:(BOOL)allowCompression  {
@@ -158,7 +165,7 @@
             break;
     }
     
-    [self.viewController presentViewController:self.galleryPickerController animated:YES completion:nil];
+    [self.getTopViewController presentViewController:self.galleryPickerController animated:YES completion:nil];
 }
 
 - (void) resolveMultiPickFromGallery:(MediaType)type withCompressionAllowed:(BOOL)allowCompression {
@@ -233,7 +240,7 @@
         self->_result = nil;
     }];
     
-    [_viewController presentViewController:dkImagePickerController animated:YES completion:nil];
+    [self.getTopViewController presentViewController:dkImagePickerController animated:YES completion:nil];
 }
 
 - (void) resolvePickAudio {
@@ -244,7 +251,7 @@
     self.audioPickerController.allowsPickingMultipleItems = NO;
     self.audioPickerController.modalPresentationStyle = UIModalPresentationCurrentContext;
     
-    [self.viewController presentViewController:self.audioPickerController animated:YES completion:nil];
+    [self.getTopViewController presentViewController:self.audioPickerController animated:YES completion:nil];
 }
 
 #pragma mark - Delegates
